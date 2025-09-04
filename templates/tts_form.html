@@ -1,0 +1,137 @@
+<!-- templates/tts/tts_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text to Speech</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            resize: vertical;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #audioContainer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text to Speech</h1>
+
+    <form id="ttsForm">
+        <textarea id="textInput" rows="5" placeholder="Enter text here..."></textarea>
+        <button type="submit">Generate Speech</button>
+    </form>
+
+    <div id="audioContainer"></div>
+
+    <script>
+        const form = document.getElementById("ttsForm");
+        const textInput = document.getElementById("textInput");
+        const audioContainer = document.getElementById("audioContainer");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const text = textInput.value.trim();
+            if (!text) {
+                audioContainer.innerHTML = '<p class="error">Please enter some text.</p>';
+                return;
+            }
+
+            audioContainer.innerHTML = "<p>Generating audio...</p>";
+
+            const response = await fetch("/api/tts/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie('csrftoken')
+                },
+                body: JSON.stringify({ text })
+            });
+
+            const data = await response.json();
+
+            if (data.audio_url) {
+                audioContainer.innerHTML = `
+                    <p>Generated Audio:</p>
+                    <audio controls autoplay>
+                        <source src="${data.audio_url}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+            } else {
+                audioContainer.innerHTML = `<p class="error">Error: ${data.error || "Unknown error"}</p>`;
+            }
+        });
+
+        // CSRF helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

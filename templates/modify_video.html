@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Video with Audio</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 40px auto; }
+        input, button { display: block; margin-top: 20px; width: 100%; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🎬 Merge Audio with Video</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Upload Video</label>
+        <input type="file" name="video" accept="video/*" required>
+
+        <label>Upload Audio</label>
+        <input type="file" name="audio" accept="audio/*" required>
+
+        <button type="submit">🔀 Merge and Download</button>
+    </form>
+</body>
+</html>

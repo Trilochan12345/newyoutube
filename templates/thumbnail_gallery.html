@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Thumbnail Gallery</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #121212;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            background: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+            border: 1px solid #333;
+            width: 25%; /* 4 thumbnails per row */
+        }
+        td img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 8px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button.download-btn {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button.download-btn:hover {
+            background-color: #005bb5;
+        }
+        /* Fullscreen overlay styles */
+        #fullscreenOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        #fullscreenOverlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+        }
+        p.title {
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+        p.created {
+            font-size: 14px;
+            color: #aaa;
+            margin: 0 0 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎯 Generated Thumbnails</h2>
+
+    {% if thumbnails %}
+    <table>
+        <tr>
+        {% for thumb in thumbnails %}
+            <td>
+                <img src="{{ thumb.output.url }}" alt="{{ thumb.title }}" onclick="openFullscreen(this)">
+                <p class="title">{{ thumb.title }}</p>
+                <p class="created">Created: {{ thumb.created_at }}</p>
+                <a href="{{ thumb.output.url }}" download="{{ thumb.title|slugify }}.jpg" class="download-btn">Download</a>
+                <a href="{% url 'delete_thumbnail' thumb.id %}" class="delete-btn" onclick="return confirm('Are you sure you want to delete this thumbnail?');">Delete</a>
+            </td>
+            {% if forloop.counter|divisibleby:4 %}
+        </tr><tr>
+            {% endif %}
+        {% endfor %}
+        </tr>
+    </table>
+    {% else %}
+    <p>No thumbnails found.</p>
+    {% endif %}
+
+    <!-- Fullscreen overlay -->
+    <div id="fullscreenOverlay" onclick="closeFullscreen()">
+        <img id="fullscreenImg" src="" alt="Fullscreen image">
+    </div>
+
+    <script>
+        function openFullscreen(img) {
+            const overlay = document.getElementById('fullscreenOverlay');
+            const fullscreenImg = document.getElementById('fullscreenImg');
+            fullscreenImg.src = img.src;
+            overlay.style.display = 'flex';
+        }
+
+        function closeFullscreen() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            overlay.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

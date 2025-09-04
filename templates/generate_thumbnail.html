@@ -1,0 +1,49 @@
+<!-- templates/generate_thumbnail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Thumbnail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #111;
+            color: white;
+        }
+        input, button {
+            padding: 0.5rem;
+            margin-top: 0.8rem;
+            width: 100%;
+            font-size: 1rem;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 1rem;
+            display: block;
+        }
+        form {
+            background: #222;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">🔥 Generate Thumbnail</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Title Text</label>
+        <input type="text" name="title" placeholder="Enter title..." required>
+
+        <label>Background Image (optional)</label>
+        <input type="file" name="background" accept="image/*">
+
+        <label>Logo (optional)</label>
+        <input type="file" name="logo" accept="image/*">
+
+        <button type="submit">Generate 🔥</button>
+    </form>
+</body>
+</html>
