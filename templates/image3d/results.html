@@ -1,0 +1,27 @@
+{% extends "image3d/base.html" %}
+{% block content %}
+  <div class="box">
+    <h2 class="subtitle">Generated images</h2>
+    <div class="columns is-multiline">
+      {% for img in images %}
+      <div class="column is-4">
+        <article class="media">
+          <figure class="media-left">
+            <p class="image is-128x128">
+              <img src="{{ img.image.url }}" alt="figurine">
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p><strong>Seed:</strong> {{ img.seed }}<br>
+                 <small>{{ img.created_at }}</small></p>
+            </div>
+            <a class="button is-small" href="{{ img.image.url }}" download>Download</a>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="button" href="{% url 'image3d:index' %}">Generate more</a>
+  </div>
+{% endblock %}

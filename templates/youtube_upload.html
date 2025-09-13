@@ -5,35 +5,18 @@
     <meta charset="UTF-8" />
     <title>Upload Video to YouTube</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input[type="text"], textarea, select {
-            width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;
-        }
-        button {
-            margin-top: 20px; padding: 10px 20px; background-color: #0073e6; color: white; border: none; cursor: pointer;
-        }
-        button:hover { background-color: #005bb5; }
-        .messages { margin-bottom: 20px; }
-        .messages .error { color: #d9534f; }
-        .messages .success { color: #5cb85c; }
-    </style>
-    <style>
         body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; position: relative; }
-
         label { display: block; margin-top: 15px; font-weight: bold; }
         input[type="text"], textarea, select {
             width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;
         }
         button {
-            margin-top: 20px; padding: 10px 20px; background-color: #0073e6; color: white; border: none; cursor: pointer;
+            margin-top: 20px; padding: 10px 20px; background-color: #ff0000; color: white; border: none; cursor: pointer;
         }
-        button:hover { background-color: #005bb5; }
-
+        button:hover { background-color: #cc0000; }
         .messages { margin-bottom: 20px; }
         .messages .error { color: #d9534f; }
         .messages .success { color: #5cb85c; }
-
         .btn {
             padding: 10px 20px;
             background-color: #0073e6;
@@ -42,22 +25,39 @@
             border-radius: 4px;
             display: inline-block;
         }
-        .btn:hover {
-            background-color: #005bb5;
-        }
-
+        .btn:hover { background-color: #005bb5; }
         /* Corner Button Style */
         .corner-btn {
             position: absolute;
             top: 20px;
             right: 20px;
         }
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 40px;
+        }
+        .logo h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff0000;
+        }
     </style>
 </head>
 <body>
 
     <a href="/modify/" class="btn corner-btn">Modify</a>
+
+    <!-- YouTube Logo + Title -->
+    <div class="logo">
+    <img src="/media/images/youtube_logo.png" alt="YouTube Logo" style="height:40px;">
     <h1>Upload Video to YouTube</h1>
+</div>
 
     <div class="messages">
         {% if messages %}
@@ -73,54 +73,37 @@
         <label for="video_file">Select Video File</label>
         <input type="file" id="video_file" name="video_file" accept="video/*" required />
 
-        <!-- <label for="audio_file">Upload Audio File (optional)</label>
-        <input type="file" id="audio_file" name="audio_file" accept="audio/*" /> -->
-
         <label for="title">Video Title</label>
         <input type="text" id="title" name="title" required placeholder="Enter video title" />
 
         <label for="description">Description</label>
         <textarea id="description" name="description" rows="4" placeholder="Enter video description" required></textarea>
 
-        <label for="tags">Tags (comma separated)</label>
-        <input type="text" id="tags" name="tags" placeholder="e.g. AI,Python,Automation" />
-
         <label for="thumbnail_file">Upload Custom Thumbnail</label>
-<input type="file" id="thumbnail_file" name="thumbnail_file" accept="image/*" />
+        <input type="file" id="thumbnail_file" name="thumbnail_file" accept="image/*" />
 
-        <label for="thumbnail_path">Choose Thumbnail</label>
-<select id="thumbnail_path" name="thumbnail_path" onchange="previewThumbnail()">
-    <option value="">-- No Thumbnail --</option>
-    {% for thumb in thumbnails %}
-        <option value="{{ thumb.output.url }}">{{ thumb.title }}</option>
-    {% empty %}
-        <option disabled>No thumbnails available</option>
-    {% endfor %}
-</select>
-
-<!-- Thumbnail preview image -->
-<div id="thumbnail_preview" style="margin-top: 10px;">
-    <img id="preview_image" src="" alt="Thumbnail Preview" style="max-width: 100%; display: none;" />
-</div>
+        <!-- Thumbnail preview image -->
+        <div id="thumbnail_preview" style="margin-top: 10px;">
+            <img id="preview_image" src="" alt="Thumbnail Preview" style="max-width: 100%; display: none;" />
+        </div>
 
         <button type="submit">Upload Video</button>
     </form>
+
+    <script>
+        function previewThumbnail() {
+            const select = document.getElementById("thumbnail_path");
+            const img = document.getElementById("preview_image");
+            const selectedUrl = select ? select.value : "";
+
+            if (selectedUrl) {
+                img.src = selectedUrl;
+                img.style.display = "block";
+            } else {
+                img.src = "";
+                img.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
-
-
-<script>
-    function previewThumbnail() {
-        const select = document.getElementById("thumbnail_path");
-        const img = document.getElementById("preview_image");
-        const selectedUrl = select.value;
-
-        if (selectedUrl) {
-            img.src = selectedUrl;
-            img.style.display = "block";
-        } else {
-            img.src = "";
-            img.style.display = "none";
-        }
-    }
-</script>

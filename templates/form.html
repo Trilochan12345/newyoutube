@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Text → Image Generator</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 40px; }
+    label { display:block; margin-top:12px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .preview { margin-top: 20px; }
+    button { padding: 10px 14px; margin-top: 16px; cursor: pointer; }
+    img { max-width: 100%; border: 1px solid #ddd; }
+  </style>
+  <script>
+    function updatePreview() {
+      const params = new URLSearchParams();
+      params.set('text', document.getElementById('text').value);
+      params.set('fg', document.getElementById('fg').value.replace('#',''));
+      params.set('bg', document.getElementById('bg').value.replace('#',''));
+      params.set('size', document.getElementById('size').value);
+      params.set('padding', document.getElementById('padding').value);
+      params.set('align', document.getElementById('align').value);
+      params.set('wrap', document.getElementById('wrap').value);
+      const font = document.getElementById('font').value.trim();
+      if (font) params.set('font', font);
+      const aa = document.getElementById('aa').value;
+      if (aa) params.set('aa', aa);
+
+      const url = '/text-image/?' + params.toString();
+      document.getElementById('preview').src = url;
+      document.getElementById('directLink').textContent = url;
+      document.getElementById('directLink').href = url;
+    }
+    window.addEventListener('DOMContentLoaded', updatePreview);
+  </script>
+</head>
+<body>
+  <h1>Text → Image (Django + Pillow)</h1>
+
+  <div class="row">
+    <div>
+      <label>Text</label>
+      <textarea id="text" rows="4" oninput="updatePreview()">Trilochan</textarea>
+
+      <div class="row">
+        <div>
+          <label>Foreground (text color)</label>
+          <input id="fg" type="color" value="#ffffff" oninput="updatePreview()">
+        </div>
+        <div>
+          <label>Background</label>
+          <input id="bg" type="color" value="#000000" oninput="updatePreview()">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Font size</label>
+          <input id="size" type="number" value="96" oninput="updatePreview()">
+        </div>
+        <div>
+          <label>Padding</label>
+          <input id="padding" type="number" value="40" oninput="updatePreview()">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Alignment</label>
+          <select id="align" onchange="updatePreview()">
+            <option value="center" selected>center</option>
+            <option value="left">left</option>
+            <option value="right">right</option>
+          </select>
+        </div>
+        <div>
+          <label>Wrap width (0 = auto)</label>
+          <input id="wrap" type="number" value="0" oninput="updatePreview()">
+        </div>
+      </div>
+
+      <label>Font file name or path (optional)</label>
+      <input id="font" placeholder="DejaVuSans.ttf" oninput="updatePreview()">
+
+      <label>Antialias (aa): none / 2x</label>
+      <select id="aa" onchange="updatePreview()">
+        <option value="">none</option>
+        <option value="2">2x</option>
+      </select>
+
+      <button onclick="updatePreview()">Update Preview</button>
+
+      <p>Direct image URL: <a id="directLink" href="#" target="_blank"></a></p>
+    </div>
+
+    <div class="preview">
+      <img id="preview" alt="preview">
+    </div>
+  </div>
+</body>
+</html>

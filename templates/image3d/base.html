@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}3D Figurine Generator{% endblock %}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+    body {
+      background: #f4f6fb;
+    }
+    .navbar {
+      border-bottom: 2px solid #eee;
+    }
+    .footer {
+      margin-top: 40px;
+      padding: 20px 0;
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar is-white" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item has-text-weight-bold" href="#">
+        🧩 3D Figurine Generator
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Section -->
+  <section class="section">
+    <div class="container">
+      <div class="card">
+        <div class="card-content">
+          <h1 class="title is-3 has-text-primary">
+            {% block header %}3D Figurine Generator{% endblock %}
+          </h1>
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>© {{ year|default:"2025" }} 3D Figurine Generator. Built with ❤️ and Bulma.</p>
+    </div>
+  </footer>
+</body>
+</html>

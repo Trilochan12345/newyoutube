@@ -1,0 +1,6 @@
+<h2>Upload your image → Get 3D CapGPT Figurine</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Generate 3D</button>
+</form>

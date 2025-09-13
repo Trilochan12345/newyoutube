@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generated Thumbnail</title>
+</head>
+<body>
+    <h1>Generated Thumbnail</h1>
+
+    <p><b>Prompt:</b> {{ prompt }}</p>
+
+    {% if gen_image %}
+        <img src="{{ gen_image }}" alt="Generated Thumbnail" width="400">
+    {% else %}
+        <p>No image generated.</p>
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'generate_thumbnail' %}">Generate Another</a>
+</body>
+</html>

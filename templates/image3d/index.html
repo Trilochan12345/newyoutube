@@ -1,0 +1,46 @@
+{% extends "image3d/base.html" %}
+{% block content %}
+<div class="section">
+  <div class="container">
+    <!-- Header -->
+    <div class="has-text-centered mb-5">
+      <h1 class="title is-3 has-text-primary">✨ AI 3D Image Generator</h1>
+      <p class="subtitle is-6">Enter your prompt and generate a 3D styled image</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <div class="card-content">
+        <form method="post" action="{% url 'image3d:generate' %}">
+          {% csrf_token %}
+          <div class="field">
+            {{ form.as_p }}
+          </div>
+          <div class="field is-grouped is-grouped-right">
+            <div class="control">
+              <button class="button is-primary is-medium" type="submit">🚀 Generate</button>
+            </div>
+          </div>
+        </form>
+        <p class="help">💡 Tip: Start with <strong>1 image at 768×768</strong> for faster results on a mid GPU.</p>
+      </div>
+    </div>
+
+    <!-- Preview (if images available) -->
+    {% if images %}
+    <div class="mt-6">
+      <h2 class="title is-5">Generated Preview</h2>
+      <div class="columns is-multiline">
+        {% for img in images %}
+        <div class="column is-one-third">
+          <figure class="image is-square">
+            <img src="{{ img.url }}" alt="Generated Image" class="is-rounded">
+          </figure>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

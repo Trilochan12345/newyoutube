@@ -4,11 +4,22 @@ from .utils.youtube_upload import upload_to_youtube_scheduled
 from Thumbnails.models import Thumbnail
 from .models import YouTubeVideoUpload
 import os, tempfile, logging
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
 def publish_to_youtube_view(request):
     thumbnails = Thumbnail.objects.all().order_by('-created_at')
+    video_dir = os.path.join(settings.MEDIA_ROOT, "ai_videos")
+    ai_videos = []
+
+    if os.path.exists(video_dir):
+        for fname in sorted(os.listdir(video_dir), reverse=True):
+            if fname.endswith(".mp4"):
+                ai_videos.append({
+                    "title": fname,
+                    "url": settings.MEDIA_URL + "ai_videos/" + fname
+                })
 
     if request.method == "POST":
         uploaded_file = request.FILES.get("video_file")
@@ -82,7 +93,7 @@ def publish_to_youtube_view(request):
             messages.error(request, f"❌ Upload failed: {str(e)}")
             return redirect("publish_to_youtube")
 
-    return render(request, "youtube_upload.html", {"thumbnails": thumbnails})
+    return render(request, "youtube_upload.html", {"thumbnails": thumbnails,"ai_videos": ai_videos})
 
 
 

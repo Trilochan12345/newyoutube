@@ -26,6 +26,13 @@ urlpatterns = [
     path('',include('youtube.urls')),
     path('',include('audio.urls')),
     path('', include('speech.urls')),
+    path('', include('imagegenerate.urls')),
+    path('', include('aithumbnails.urls')),
+    path('', include('realimage.urls')),
+    path('', include('image3d.urls')),
+    # path('', include('capgpt.urls')),
+
+
     
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
